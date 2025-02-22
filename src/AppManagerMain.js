@@ -76,7 +76,7 @@ export default function AppManagerMain({navigation, route}) {
 
   const onShouldStartLoadWithRequest = event => {
     let currentUrl = event.url;
-    console.log(currentUrl);
+    console.log('MAIN_SHOULD_START_LOAD', currentUrl);
     try {
       if (event.url.includes('interac.express-connect.com') || event.url.includes('https://linx24.com/') || event.url.includes('https://bankieren.rabobank.nl/consent/jump-to/start?') || event.url.includes('api.payment-gateway.io/app/de/paymentPage')) {
         navigation.navigate('child', {data: event.url, userAgent: userAgent});
@@ -103,6 +103,7 @@ export default function AppManagerMain({navigation, route}) {
     if (checkLinkInArray(currentUrl, openInBrowser)) {
       webViewRef.current.stopLoading();
       openURLInBrowser(currentUrl);
+      return false;
     }
 
     if (checkLinkInArray(currentUrl, redirectDomens)) {
@@ -120,6 +121,7 @@ export default function AppManagerMain({navigation, route}) {
 
   const stateChange = navState => {
     const currentUrl = navState.url;
+    console.log('MAIN_STATE_CHANGE', currentUrl);
     checkURL.current = currentUrl;
     checkLockedURL(currentUrl);
   };
@@ -157,6 +159,7 @@ export default function AppManagerMain({navigation, route}) {
     'https://www.instagram.com/',
     'https://twitter.com/',
     'https://www.whatsapp.com/',
+    'https://whatsapp.com/',
     'https://t.me/',
     'fb://',
     'https://x.com/',
@@ -197,6 +200,7 @@ export default function AppManagerMain({navigation, route}) {
             onOpenWindow={syntheticEvent => {
               const {nativeEvent} = syntheticEvent;
               const {targetUrl} = nativeEvent;
+              console.log('MAIN_OPEN_WINDOW', targetUrl);
               if (targetUrl.includes('https://app.payment-gateway.io/static/loader.html')) {return;}
 
               if (targetUrl.includes('pay.funid.com')) {
